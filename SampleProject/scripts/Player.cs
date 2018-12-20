@@ -15,7 +15,7 @@ namespace SampleProject.GameObjects.Player
         public Rectangle transform;
         public ContentManager content;
         public SpriteBatch spriteBatch;
-        public int xPos, yPos, width, height;
+        public int width, height;
 
         private List<Wall> walls;
         private Wall currentFloor;
@@ -40,6 +40,8 @@ namespace SampleProject.GameObjects.Player
             position = new Vector2(50, 50);
             drawRect = new Rectangle(0,0,30,30);
             scale = 1;
+            width = 30;
+            height = 30;
         }
 
         public override void LoadContent()
@@ -69,14 +71,20 @@ namespace SampleProject.GameObjects.Player
 
         private void CheckCollisions() 
         {
-            transform.Y += ySpeed;
-            transform.X += xSpeed;
+            //transform.Y += ySpeed;
+            //transform.X += xSpeed;
+            position.Y += ySpeed;
+            position.X += xSpeed;
 
-            int wallLeft, wallRight, wallTop, wallBottom;
-            int left = transform.X;
+            float wallLeft, wallRight, wallTop, wallBottom;
+            /*int left = transform.X;
             int right = transform.Right;
             int top = transform.Y;
-            int bottom = transform.Y + transform.Height;
+            int bottom = transform.Y + transform.Height;*/
+            float left = position.X;
+            float right = position.X + width;
+            float top = position.Y;
+            float bottom = position.Y + height;
 
             // check cardinal collisions
             foreach (Wall wall in walls) 
@@ -94,7 +102,7 @@ namespace SampleProject.GameObjects.Player
                     {
                         // set downward collision true
                         ySpeed = 0;
-                        transform.Y = wallTop - transform.Height;
+                        position.Y = wallTop - height;
                         currentFloor = wall;
                         grounded = true;
                     }
@@ -128,7 +136,7 @@ namespace SampleProject.GameObjects.Player
         {
             if (currentFloor != null &&
                 transform.Left <= currentFloor.transform.Right && transform.Right >= currentFloor.transform.Left &&
-                (transform.Bottom + 1 <= currentFloor.transform.Bottom && transform.Bottom + 1 >= currentFloor.transform.Top))
+                transform.Bottom + 1 <= currentFloor.transform.Bottom && transform.Bottom + 1 >= currentFloor.transform.Top)
             {
                 grounded = true;
             } else
@@ -183,8 +191,8 @@ namespace SampleProject.GameObjects.Player
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, transform, Color.White);
-            /*spriteBatch.Draw(
+            //spriteBatch.Draw(texture, transform, Color.White);
+            spriteBatch.Draw(
                 texture,
                 position,
                 drawRect,
@@ -194,7 +202,7 @@ namespace SampleProject.GameObjects.Player
                 scale,
                 SpriteEffects.None,
                 0                       // Layer depth
-            );*/
+            );
         }
     }
 }
