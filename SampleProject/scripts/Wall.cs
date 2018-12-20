@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-namespace SampleProject.GameObjects.Wall
+namespace SampleProject.GameObjects.Walls
 {
     public class Wall : GameObject
     {

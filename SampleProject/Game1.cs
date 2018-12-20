@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 using SampleProject.GameObjects;
 using SampleProject.GameObjects.Player;
-using SampleProject.GameObjects.Wall;
+using SampleProject.GameObjects.Walls;
 
 namespace SampleProject
 {
@@ -21,6 +21,8 @@ namespace SampleProject
         readonly Player player;
         readonly Wall wall;
 
+        List<Wall> walls;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -28,6 +30,7 @@ namespace SampleProject
             player = new Player(Content, spriteBatch);
             wall = new Wall(Content, spriteBatch);
             gameObjects = new List<GameObject>() {player, wall};
+            walls = new List<Wall>() { wall };
         }
 
         /// <summary>
@@ -44,6 +47,8 @@ namespace SampleProject
             {
                 gameObject.Initialize();
             }
+
+            player.SetWalls(walls);
 
             base.Initialize();
         }
