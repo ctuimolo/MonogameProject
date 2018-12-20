@@ -17,12 +17,17 @@ namespace SampleProject.GameObjects.Player
         public int xPos, yPos, width, height;
 
         private List<Wall> walls;
+        private Wall currentFloor;
         private int gravity = 1;
         private int maxSpeed = 10;
         private int moveSpeed = 3;
         private int xSpeed = 0;
         private int ySpeed = 0;
         private bool grounded = false;
+        private bool topCollision = false;
+        private bool bottomCollision = false;
+        private bool leftCollision = false;
+        private bool rightCollision = false;
 
         public Player(ContentManager rootContent, SpriteBatch rootSpriteBatch)
         {
@@ -48,7 +53,7 @@ namespace SampleProject.GameObjects.Player
 
         public void ApplyGravity() {
 
-            if(ySpeed < maxSpeed) {
+            if(!grounded && ySpeed < maxSpeed) {
                 ySpeed += gravity;
                 if(ySpeed > maxSpeed) {
                     ySpeed = maxSpeed;
@@ -58,14 +63,26 @@ namespace SampleProject.GameObjects.Player
 
         private void CheckCollisions() 
         {
+            ApplyGravity();
+            transform.Y += ySpeed;
+            transform.X += xSpeed;
 
             int wallLeft, wallRight, wallTop, wallBottom;
             int left = transform.X;
-            int right = transform.X + transform.Width;
+            int right = transform.Right;
             int top = transform.Y;
             int bottom = transform.Y + transform.Height;
 
-            foreach(Wall wall in walls) 
+            // check if grounded
+            if (currentFloor != null && grounded &&
+                left > currentFloor.transform.Right && right < currentFloor.transform.Left &&
+                (bottom + 1 > currentFloor.transform.Bottom || bottom + 1 < currentFloor.transform.Top)) 
+            {
+                grounded = false;
+            }
+
+            // check cardinal collisions
+            foreach (Wall wall in walls) 
             {
                 wallLeft = wall.transform.X;
                 wallRight = wall.transform.X + wall.transform.Width;
@@ -76,15 +93,17 @@ namespace SampleProject.GameObjects.Player
                 if( left <= wallRight && right >= wallLeft) 
                 {
                     // check downward
-                    if( bottom >= wallTop) 
+                    if( bottom >= wallTop && !grounded) 
                     {
                         // set downward collision true
+                        grounded = true;
                         ySpeed = 0;
                         transform.Y = wallTop - transform.Height;
+                        currentFloor = wall;
                     }
 
                     // check upward
-                    if( top <= wallBottom) 
+                    if ( top <= wallBottom) 
                     {
                         // set upward collision true
                     }
@@ -103,13 +122,13 @@ namespace SampleProject.GameObjects.Player
                     }
                 }
             }
+
+            xSpeed = 0;
+            
         }
 
         public override void Update()
         {
-            xSpeed = 0;
-            ApplyGravity();
-            CheckCollisions();
 
             if (Keyboard.GetState().IsKeyDown(Keys.D) && !Keyboard.GetState().IsKeyDown(Keys.A))
             {
@@ -119,13 +138,13 @@ namespace SampleProject.GameObjects.Player
             {
                 xSpeed = -moveSpeed;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.W)) {
+            if (Keyboard.GetState().IsKeyDown(Keys.W) && grounded) {
                 ySpeed = -10;
+                grounded = false;
+                currentFloor = null;
             }
 
-            transform.Y += ySpeed;
-            transform.X += xSpeed;
-
+            CheckCollisions();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
