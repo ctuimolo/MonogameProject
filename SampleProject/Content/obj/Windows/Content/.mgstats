@@ -1,0 +1,4 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Projects/SampleProject/SampleProject/Content/black.png","C:/Projects/SampleProject/SampleProject/Content/bin/Windows/Content/black.xnb","TextureProcessor","Texture2DContent",133,4181,0.1306506
+"C:/Projects/SampleProject/SampleProject/Content/grey.png","C:/Projects/SampleProject/SampleProject/Content/bin/Windows/Content/grey.xnb","TextureProcessor","Texture2DContent",153,4181,0.154495
+"C:/Projects/SampleProject/SampleProject/Content/white.png","C:/Projects/SampleProject/SampleProject/Content/bin/Windows/Content/white.xnb","TextureProcessor","Texture2DContent",157,4181,1.223712
