@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
 using SampleProject.GameObjects.Walls;
+using SampleProject.AABBPhysics;
 
 namespace SampleProject.GameObjects.Player
 {
@@ -21,8 +22,10 @@ namespace SampleProject.GameObjects.Player
         private int gravity = 1;
         private int maxSpeed = 10;
         private int moveSpeed = 3;
-        private int xSpeed = 0;
-        private int ySpeed = 0;
+        private int xSpeed, ySpeed;
+        private Vector2 position;
+        private Rectangle drawRect;
+        private float scale;
         private bool grounded = false;
         private bool topCollision = false;
         private bool bottomCollision = false;
@@ -34,6 +37,9 @@ namespace SampleProject.GameObjects.Player
             content = rootContent;
             spriteBatch = rootSpriteBatch;
             transform = new Rectangle(50, 50, 30, 30);
+            position = new Vector2(50, 50);
+            drawRect = new Rectangle(0,0,30,30);
+            scale = 1;
         }
 
         public override void LoadContent()
@@ -63,7 +69,6 @@ namespace SampleProject.GameObjects.Player
 
         private void CheckCollisions() 
         {
-            ApplyGravity();
             transform.Y += ySpeed;
             transform.X += xSpeed;
 
@@ -72,14 +77,6 @@ namespace SampleProject.GameObjects.Player
             int right = transform.Right;
             int top = transform.Y;
             int bottom = transform.Y + transform.Height;
-
-            // check if grounded
-            if (currentFloor != null && grounded &&
-                left > currentFloor.transform.Right && right < currentFloor.transform.Left &&
-                (bottom + 1 > currentFloor.transform.Bottom || bottom + 1 < currentFloor.transform.Top)) 
-            {
-                grounded = false;
-            }
 
             // check cardinal collisions
             foreach (Wall wall in walls) 
@@ -96,10 +93,10 @@ namespace SampleProject.GameObjects.Player
                     if( bottom >= wallTop && !grounded) 
                     {
                         // set downward collision true
-                        grounded = true;
                         ySpeed = 0;
                         transform.Y = wallTop - transform.Height;
                         currentFloor = wall;
+                        grounded = true;
                     }
 
                     // check upward
@@ -127,16 +124,51 @@ namespace SampleProject.GameObjects.Player
             
         }
 
+        private void CheckGrounded()
+        {
+            if (currentFloor != null &&
+                transform.Left <= currentFloor.transform.Right && transform.Right >= currentFloor.transform.Left &&
+                (transform.Bottom + 1 <= currentFloor.transform.Bottom && transform.Bottom + 1 >= currentFloor.transform.Top))
+            {
+                grounded = true;
+            } else
+            {
+                grounded = false;
+            }
+        }
+
+        private void MoveDown()
+        {
+
+        }
+
+        private void MoveUp()
+        {
+
+        }
+
+        private void MoveRight()
+        {
+            xSpeed = moveSpeed;
+        }
+
+        private void MoveLeft()
+        {
+            xSpeed = -moveSpeed;
+        }
+
         public override void Update()
         {
 
+
+
             if (Keyboard.GetState().IsKeyDown(Keys.D) && !Keyboard.GetState().IsKeyDown(Keys.A))
             {
-                xSpeed = moveSpeed;
+                MoveRight();
             }
             if (Keyboard.GetState().IsKeyDown(Keys.A) && !Keyboard.GetState().IsKeyDown(Keys.D))
             {
-                xSpeed = -moveSpeed;
+                MoveLeft();
             }
             if (Keyboard.GetState().IsKeyDown(Keys.W) && grounded) {
                 ySpeed = -10;
@@ -144,12 +176,25 @@ namespace SampleProject.GameObjects.Player
                 currentFloor = null;
             }
 
+            CheckGrounded();
+            ApplyGravity();
             CheckCollisions();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, transform, Color.White);
+            /*spriteBatch.Draw(
+                texture,
+                position,
+                drawRect,
+                Color.White,
+                0f,                     // Rotation
+                Vector2.Zero,           // Origin
+                scale,
+                SpriteEffects.None,
+                0                       // Layer depth
+            );*/
         }
     }
 }
