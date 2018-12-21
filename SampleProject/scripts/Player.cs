@@ -37,7 +37,7 @@ namespace SampleProject.GameObjects.Player
             content = rootContent;
             spriteBatch = rootSpriteBatch;
             transform = new Rectangle(50, 50, 30, 30);
-            position = new Vector2(50, 50);
+            position = new Vector2(50f, 50f);
             drawRect = new Rectangle(0,0,30,30);
             scale = 1;
             width = 30;

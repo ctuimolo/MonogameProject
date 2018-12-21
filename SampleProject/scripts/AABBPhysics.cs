@@ -5,17 +5,29 @@ using Microsoft.Xna.Framework.Content;
 namespace SampleProject.AABBPhysics
 {
 
-    class PhysicsObject
+    public struct FloatRect
     {
-        Rectangle transform;
+        public float X;
+        public float Y;
+        public float Top;
+        public float Bottom;
+        public float Left;
+        public float Right;
+        public float Width;
+        public float Height;
 
-        public PhysicsObject()
+        public FloatRect(float Left, float Top, float Width, float Height)
         {
-            transform = new Rectangle();
+
         }
     }
 
     public class AABBPhysics
     {
+       AABBPhysics()
+        {
+            FloatRect floatRect;
+            floatRect.X = 10;
+        }
     }
 }
