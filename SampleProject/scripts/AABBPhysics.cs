@@ -18,13 +18,20 @@ namespace SampleProject.AABBPhysics
 
         public FloatRect(float Left, float Top, float Width, float Height)
         {
-
+            this.Left = Left;
+            this.Top = Top;
+            this.Width = Width;
+            this.Height = Height;
+            this.X = Left;
+            this.Y = Top;
+            this.Right = Left + Width;
+            this.Bottom = Top + Height;
         }
     }
 
-    public class AABBPhysics
+    public class AABBPhysicsHandler
     {
-       AABBPhysics()
+        public AABBPhysicsHandler()
         {
             FloatRect floatRect;
             floatRect.X = 10;

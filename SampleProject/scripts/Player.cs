@@ -27,10 +27,6 @@ namespace SampleProject.GameObjects.Player
         private Rectangle drawRect;
         private float scale;
         private bool grounded = false;
-        private bool topCollision = false;
-        private bool bottomCollision = false;
-        private bool leftCollision = false;
-        private bool rightCollision = false;
 
         public Player(ContentManager rootContent, SpriteBatch rootSpriteBatch)
         {

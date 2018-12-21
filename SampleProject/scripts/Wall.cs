@@ -12,11 +12,20 @@ namespace SampleProject.GameObjects.Walls
         public SpriteBatch spriteBatch;
         public int xPos, yPos, width, height;
 
+        private Vector2 position;
+        private Rectangle drawRect;
+        private Vector2 scale;
+
         public Wall(ContentManager rootContent, SpriteBatch rootSpriteBatch)
         {
             content = rootContent;
             spriteBatch = rootSpriteBatch;
             transform = new Rectangle(40, 300, 600, 50);
+            position = new Vector2(40f, 300f);
+            drawRect = new Rectangle(0, 0, 1, 1);
+            scale = new Vector2(600,50);
+            width = 600;
+            height = 50;
         }
 
         public override void Initialize()
@@ -36,7 +45,18 @@ namespace SampleProject.GameObjects.Walls
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, transform, Color.White);
+            //spriteBatch.Draw(texture, transform, Color.White);
+            spriteBatch.Draw(
+                texture,
+                position,
+                drawRect,
+                Color.White,
+                0f,                     // Rotation
+                Vector2.Zero,           // Origin
+                new Vector2(width,height),
+                SpriteEffects.None,
+                0                       // Layer depth
+            );
         }
     }
 }
