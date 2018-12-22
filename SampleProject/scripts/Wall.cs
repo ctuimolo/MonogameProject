@@ -10,22 +10,22 @@ namespace SampleProject.GameObjects.Walls
         public Rectangle transform;
         public ContentManager content;
         public SpriteBatch spriteBatch;
-        public int xPos, yPos, width, height;
+        public int width, height;
+        public Vector2 position;
 
-        private Vector2 position;
         private Rectangle drawRect;
         private Vector2 scale;
 
-        public Wall(ContentManager rootContent, SpriteBatch rootSpriteBatch)
+        public Wall(ContentManager rootContent, SpriteBatch rootSpriteBatch, Vector2 position, int Width, int Height)
         {
             content = rootContent;
             spriteBatch = rootSpriteBatch;
-            transform = new Rectangle(40, 300, 600, 50);
-            position = new Vector2(40f, 300f);
+            //transform = new Rectangle(40, 300, 600, 50);
+            this.position = position;
             drawRect = new Rectangle(0, 0, 1, 1);
             scale = new Vector2(600,50);
-            width = 600;
-            height = 50;
+            width = Width;
+            height = Height;
         }
 
         public override void Initialize()

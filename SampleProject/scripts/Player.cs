@@ -32,7 +32,7 @@ namespace SampleProject.GameObjects.Player
         {
             content = rootContent;
             spriteBatch = rootSpriteBatch;
-            transform = new Rectangle(50, 50, 30, 30);
+            //transform = new Rectangle(50, 50, 30, 30);
             position = new Vector2(50f, 50f);
             drawRect = new Rectangle(0,0,30,30);
             scale = 1;
@@ -85,10 +85,10 @@ namespace SampleProject.GameObjects.Player
             // check cardinal collisions
             foreach (Wall wall in walls) 
             {
-                wallLeft = wall.transform.X;
-                wallRight = wall.transform.X + wall.transform.Width;
-                wallTop = wall.transform.Y;
-                wallBottom = wall.transform.Y + wall.transform.Height;
+                wallLeft = wall.position.X;
+                wallRight = wall.position.X + wall.width;
+                wallTop = wall.position.Y;
+                wallBottom = wall.position.Y + wall.height;
 
                 // check vertically aligned collisions
                 if( left <= wallRight && right >= wallLeft) 
@@ -163,8 +163,6 @@ namespace SampleProject.GameObjects.Player
 
         public override void Update()
         {
-
-
 
             if (Keyboard.GetState().IsKeyDown(Keys.D) && !Keyboard.GetState().IsKeyDown(Keys.A))
             {

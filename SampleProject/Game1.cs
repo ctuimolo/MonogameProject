@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using SampleProject.GameObjects;
 using SampleProject.GameObjects.Player;
 using SampleProject.GameObjects.Walls;
+using SampleProject.AABBPhysics;
 
 namespace SampleProject
 {
@@ -16,21 +17,17 @@ namespace SampleProject
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        AABBPhysicsHandler PhysicsHandler;
 
         List<GameObject> gameObjects;
-        readonly Player player;
-        readonly Wall wall;
+        Player player;
 
         List<Wall> walls;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            player = new Player(Content, spriteBatch);
-            wall = new Wall(Content, spriteBatch);
-            gameObjects = new List<GameObject>() {player, wall};
-            walls = new List<Wall>() { wall };
+
         }
 
         /// <summary>
@@ -42,13 +39,17 @@ namespace SampleProject
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            Content.RootDirectory = "Content";
+            player = new Player(Content, spriteBatch);
+            gameObjects = new List<GameObject>() { player };
+            walls = new List<Wall>();
+            player.SetWalls(walls);
 
             foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.Initialize();
             }
-
-            player.SetWalls(walls);
 
             base.Initialize();
         }
@@ -59,8 +60,21 @@ namespace SampleProject
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            Wall wall1 = new Wall(Content, spriteBatch, new Vector2(40, 300), 700, 50);
+            Wall wall2 = new Wall(Content, spriteBatch, new Vector2(160, 270), 290, 30);
+            Wall wall3 = new Wall(Content, spriteBatch, new Vector2(470, 220), 90, 10);
+            Wall wall4 = new Wall(Content, spriteBatch, new Vector2(300, 190), 100, 30);
+
+            walls.Add(wall1);
+            walls.Add(wall2);
+            walls.Add(wall3);
+            walls.Add(wall4);
+
+            gameObjects.Add(wall1);
+            gameObjects.Add(wall2);
+            gameObjects.Add(wall3);
+            gameObjects.Add(wall4);
+
             foreach (GameObject gameObject in gameObjects)
             {
                 gameObject.LoadContent();
