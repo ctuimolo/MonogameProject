@@ -17,6 +17,6 @@ namespace SampleProject.GameObjects
         public abstract void LoadContent();
         public abstract void Collide(GameObject otherObject);
         public abstract void Update();
-        public abstract CollisionType CollisionType { get; set; }
+        public CollisionType collisionType;
     }
 }

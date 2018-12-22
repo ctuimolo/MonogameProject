@@ -15,10 +15,13 @@ namespace SampleProject.AABBPhysics
         public float Left, Right, Top, Bottom;
         public float Width, Height;
 
-        public BoxCollider(float X, float Y, float Width, float Height)
+        public GameObject owner;
+
+        public BoxCollider(GameObject owner, float X, float Y, float Width, float Height)
         {
             position = new Vector2(X,Y);
             size = new Vector2(Width, Height);
+            this.owner = owner;
 
             Left = position.X;
             Right = position.X + size.X;
@@ -41,25 +44,28 @@ namespace SampleProject.AABBPhysics
 
         public void MoveDown(BoxCollider Self, List<CollisionType> CollisionCache, float Speed)
         {
-            BoxCollider RayTracer = new BoxCollider(
-                Self.position.X, 
-                Self.position.Y + Self.size.Y,
-                Self.size.X,
-                Speed
-            );
+            float RayTraceLeft = Self.position.X;
+            float RayTraceRight = Self.position.X + Self.size.X;
+            float RayTraceTop = Self.position.Y + Self.size.Y;
+            float RayTraceBottom = RayTraceTop + Speed;
 
-            float closestWall = float.NaN;
+            BoxCollider contactObject;
 
             foreach(BoxCollider Other in BoxColliders)
             {
-                if (RayTracer.Left <= Other.Right && RayTracer.Right >= Other.Left &&
-                    RayTracer.Bottom >= Other.Top)
+                if (RayTraceLeft <= Other.Right && RayTraceRight >= Other.Left &&
+                    RayTraceBottom >= Other.Top)
                 {
-                    if(closestWall == float.NaN || Other.Top < closestWall)
+                    if(contactObject == || Other.Top < contactObject)
                     {
-
+                        closestWall = Other.Top;
                     }
                 }
+            }
+
+            if (closestWall != float.NaN)
+            {
+                Self.owner.Collide();
             }
         }
 

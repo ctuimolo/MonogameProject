@@ -38,7 +38,7 @@ namespace SampleProject.GameObjects.Player
         public override void LoadContent()
         {
             texture = content.Load<Texture2D>("white");
-            transform = new BoxCollider(50,50,30,30);
+            transform = new BoxCollider(this, 50,50,30,30);
             drawRect = new Rectangle(0, 0, 30, 30);
         }
 

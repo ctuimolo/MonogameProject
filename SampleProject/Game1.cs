@@ -49,10 +49,10 @@ namespace SampleProject
             walls = new List<Wall>();
             player.SetWalls(walls);
 
-            Wall wall1 = new Wall(Content, spriteBatch, physicsHandler, new BoxCollider(40, 300, 700, 50));
-            Wall wall2 = new Wall(Content, spriteBatch, physicsHandler, new BoxCollider(160, 270, 290, 30));
-            Wall wall3 = new Wall(Content, spriteBatch, physicsHandler, new BoxCollider(470, 220, 90, 10));
-            Wall wall4 = new Wall(Content, spriteBatch, physicsHandler, new BoxCollider(300, 190, 100, 30));
+            Wall wall1 = new Wall(Content, spriteBatch, physicsHandler, 40, 300, 700, 50);
+            Wall wall2 = new Wall(Content, spriteBatch, physicsHandler, 160, 270, 290, 30);
+            Wall wall3 = new Wall(Content, spriteBatch, physicsHandler, 470, 220, 90, 10);
+            Wall wall4 = new Wall(Content, spriteBatch, physicsHandler, 300, 190, 100, 30);
 
             walls.Add(wall1);
             walls.Add(wall2);

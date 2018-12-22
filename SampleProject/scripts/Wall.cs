@@ -17,13 +17,18 @@ namespace SampleProject.GameObjects.Walls
 
         public BoxCollider transform;
 
+        float X, Y, Width, Height;
+
         private Rectangle drawRect;
 
-        public Wall(ContentManager rootContent, SpriteBatch rootSpriteBatch, AABBPhysicsHandler physicsHandler, BoxCollider boxCollider) {
+        public Wall(ContentManager rootContent, SpriteBatch rootSpriteBatch, AABBPhysicsHandler physicsHandler, float X, float Y, float Width, float Height) {
             content = rootContent;
             spriteBatch = rootSpriteBatch;
             this.physicsHandler = physicsHandler;
-            transform = boxCollider;
+            this.X = X;
+            this.Y = Y;
+            this.Height = Height;
+            this.Width = Width;
         }
 
         public override void Initialize()
@@ -35,8 +40,8 @@ namespace SampleProject.GameObjects.Walls
         {
             texture = content.Load<Texture2D>("grey");
             drawRect = new Rectangle(0, 0, 1, 1);
+            transform = new BoxCollider(this, X, Y, Width, Height);
         }
-
 
         public override void Collide(GameObject otherObject)
         {
