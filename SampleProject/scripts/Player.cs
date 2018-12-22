@@ -12,10 +12,10 @@ namespace SampleProject.GameObjects.Player
     public class Player : GameObject
     {
         public Texture2D texture;
-        public Rectangle transform;
         public ContentManager content;
+        private AABBPhysicsHandler physicsHandler;
         public SpriteBatch spriteBatch;
-        public int width, height;
+        BoxCollider transform;
 
         private List<Wall> walls;
         private Wall currentFloor;
@@ -23,33 +23,34 @@ namespace SampleProject.GameObjects.Player
         private int maxSpeed = 10;
         private int moveSpeed = 3;
         private int xSpeed, ySpeed;
-        private Vector2 position;
         private Rectangle drawRect;
-        private float scale;
+        private float scale = 1;
         private bool grounded = false;
 
-        public Player(ContentManager rootContent, SpriteBatch rootSpriteBatch)
+        public Player(ContentManager rootContent, SpriteBatch rootSpriteBatch, AABBPhysicsHandler physicsHandler)
         {
             content = rootContent;
             spriteBatch = rootSpriteBatch;
-            //transform = new Rectangle(50, 50, 30, 30);
-            position = new Vector2(50f, 50f);
-            drawRect = new Rectangle(0,0,30,30);
-            scale = 1;
-            width = 30;
-            height = 30;
+            this.physicsHandler = physicsHandler;
+            physicsHandler.AddBoxCollider(transform);
         }
 
         public override void LoadContent()
         {
             texture = content.Load<Texture2D>("white");
+            transform = new BoxCollider(50,50,30,30);
+            drawRect = new Rectangle(0, 0, 30, 30);
         }
 
         public override void Initialize()
         {
-
         }
 
+        public override void Collide(GameObject otherObject)
+        {
+
+        }
+        
         public void SetWalls(List<Wall> rootWalls) 
         {
             walls = rootWalls;
@@ -69,26 +70,26 @@ namespace SampleProject.GameObjects.Player
         {
             //transform.Y += ySpeed;
             //transform.X += xSpeed;
-            position.Y += ySpeed;
-            position.X += xSpeed;
+            transform.position.Y += ySpeed;
+            transform.position.X += xSpeed;
 
             float wallLeft, wallRight, wallTop, wallBottom;
             /*int left = transform.X;
             int right = transform.Right;
             int top = transform.Y;
             int bottom = transform.Y + transform.Height;*/
-            float left = position.X;
-            float right = position.X + width;
-            float top = position.Y;
-            float bottom = position.Y + height;
+            float left = transform.position.X;
+            float right = transform.position.X + transform.size.X;
+            float top = transform.position.Y;
+            float bottom = transform.position.Y + transform.size.Y;
 
             // check cardinal collisions
             foreach (Wall wall in walls) 
             {
-                wallLeft = wall.position.X;
-                wallRight = wall.position.X + wall.width;
-                wallTop = wall.position.Y;
-                wallBottom = wall.position.Y + wall.height;
+                wallLeft = wall.transform.position.X;
+                wallRight = wall.transform.position.X + wall.transform.size.X;
+                wallTop = wall.transform.position.Y;
+                wallBottom = wall.transform.position.Y + wall.transform.size.Y;
 
                 // check vertically aligned collisions
                 if( left <= wallRight && right >= wallLeft) 
@@ -98,7 +99,7 @@ namespace SampleProject.GameObjects.Player
                     {
                         // set downward collision true
                         ySpeed = 0;
-                        position.Y = wallTop - height;
+                        transform.position.Y = wallTop - transform.size.Y;
                         currentFloor = wall;
                         grounded = true;
                     }
@@ -188,7 +189,7 @@ namespace SampleProject.GameObjects.Player
             //spriteBatch.Draw(texture, transform, Color.White);
             spriteBatch.Draw(
                 texture,
-                position,
+                transform.position,
                 drawRect,
                 Color.White,
                 0f,                     // Rotation
