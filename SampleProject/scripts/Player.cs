@@ -15,30 +15,30 @@ namespace SampleProject.GameObjects.Player
         public ContentManager content;
         private AABBPhysicsHandler physicsHandler;
         public SpriteBatch spriteBatch;
-        BoxCollider transform;
+        public BoxCollider transform;
 
         private List<Wall> walls;
         private Wall currentFloor;
         private int gravity = 1;
         private int maxSpeed = 10;
         private int moveSpeed = 3;
-        private int xSpeed, ySpeed;
+        //private int xSpeed, ySpeed;
         private Rectangle drawRect;
         private float scale = 1;
-        private bool grounded = false;
+        public bool grounded = false;
 
         public Player(ContentManager rootContent, SpriteBatch rootSpriteBatch, AABBPhysicsHandler physicsHandler)
         {
             content = rootContent;
             spriteBatch = rootSpriteBatch;
             this.physicsHandler = physicsHandler;
-            physicsHandler.AddBoxCollider(transform);
         }
 
         public override void LoadContent()
         {
             texture = content.Load<Texture2D>("white");
             transform = new BoxCollider(this, 50,50,30,30);
+            physicsHandler.AddBoxCollider(transform);
             drawRect = new Rectangle(0, 0, 30, 30);
         }
 
@@ -46,9 +46,14 @@ namespace SampleProject.GameObjects.Player
         {
         }
 
-        public override void Collide(GameObject otherObject)
+        public override void Collide(BoxCollider collision)
         {
-
+            if (collision.owner.collisionType == CollisionType.wall)
+            {
+                transform.speed.Y = 0;
+                transform.position.Y = collision.Top - transform.size.Y;
+                grounded = true;
+            }
         }
         
         public void SetWalls(List<Wall> rootWalls) 
@@ -56,17 +61,17 @@ namespace SampleProject.GameObjects.Player
             walls = rootWalls;
         }
 
-        public void ApplyGravity() {
-
-            if(!grounded && ySpeed < maxSpeed) {
-                ySpeed += gravity;
-                if(ySpeed > maxSpeed) {
-                    ySpeed = maxSpeed;
+        public void ApplyGravity()
+        {
+            if(!grounded && transform.speed.Y < maxSpeed) {
+                transform.speed.Y += gravity;
+                if(transform.speed.Y > maxSpeed) {
+                    transform.speed.Y = maxSpeed;
                 }
             }
         }
 
-        private void CheckCollisions() 
+        /*private void CheckCollisions() 
         {
             //transform.Y += ySpeed;
             //transform.X += xSpeed;
@@ -74,10 +79,10 @@ namespace SampleProject.GameObjects.Player
             transform.position.X += xSpeed;
 
             float wallLeft, wallRight, wallTop, wallBottom;
-            /*int left = transform.X;
+            int left = transform.X;
             int right = transform.Right;
             int top = transform.Y;
-            int bottom = transform.Y + transform.Height;*/
+            int bottom = transform.Y + transform.Height;
             float left = transform.position.X;
             float right = transform.position.X + transform.size.X;
             float top = transform.position.Y;
@@ -127,7 +132,7 @@ namespace SampleProject.GameObjects.Player
 
             xSpeed = 0;
             
-        }
+        }*/
 
         private void CheckGrounded()
         {
@@ -154,16 +159,17 @@ namespace SampleProject.GameObjects.Player
 
         private void MoveRight()
         {
-            xSpeed = moveSpeed;
+            transform.speed.X = moveSpeed;
         }
 
         private void MoveLeft()
         {
-            xSpeed = -moveSpeed;
+            transform.speed.X = -moveSpeed;
         }
 
         public override void Update()
         {
+            ApplyGravity();
 
             if (Keyboard.GetState().IsKeyDown(Keys.D) && !Keyboard.GetState().IsKeyDown(Keys.A))
             {
@@ -174,14 +180,15 @@ namespace SampleProject.GameObjects.Player
                 MoveLeft();
             }
             if (Keyboard.GetState().IsKeyDown(Keys.W) && grounded) {
-                ySpeed = -10;
+                Debug.WriteLine("Jumped");
+                transform.speed.Y = -10;
                 grounded = false;
-                currentFloor = null;
             }
 
-            CheckGrounded();
-            ApplyGravity();
-            CheckCollisions();
+            //CheckGrounded();
+            //ApplyGravity();
+            //CheckCollisions();
+            physicsHandler.UpdatePosition(transform);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

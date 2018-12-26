@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using SampleProject.AABBPhysics;
 
 namespace SampleProject.GameObjects
 {
@@ -15,7 +16,7 @@ namespace SampleProject.GameObjects
         public abstract void Initialize();
         public abstract void Draw(SpriteBatch rootSpriteBatch);
         public abstract void LoadContent();
-        public abstract void Collide(GameObject otherObject);
+        public abstract void Collide(BoxCollider otherObject);
         public abstract void Update();
         public CollisionType collisionType;
     }

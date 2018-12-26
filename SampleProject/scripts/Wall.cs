@@ -17,7 +17,7 @@ namespace SampleProject.GameObjects.Walls
 
         public BoxCollider transform;
 
-        float X, Y, Width, Height;
+        readonly float X, Y, Width, Height;
 
         private Rectangle drawRect;
 
@@ -29,11 +29,11 @@ namespace SampleProject.GameObjects.Walls
             this.Y = Y;
             this.Height = Height;
             this.Width = Width;
+            collisionType = CollisionType.wall;
         }
 
         public override void Initialize()
         {
-            physicsHandler.AddBoxCollider(transform);
         }
 
         public override void LoadContent()
@@ -41,9 +41,10 @@ namespace SampleProject.GameObjects.Walls
             texture = content.Load<Texture2D>("grey");
             drawRect = new Rectangle(0, 0, 1, 1);
             transform = new BoxCollider(this, X, Y, Width, Height);
+            physicsHandler.AddBoxCollider(transform);
         }
 
-        public override void Collide(GameObject otherObject)
+        public override void Collide(BoxCollider otherObject)
         {
 
         }
