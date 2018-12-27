@@ -90,7 +90,7 @@ namespace SampleProject.AABBPhysics
                     if (RayTraceLeft <= Other.Right && RayTraceRight >= Other.Left &&
                         RayTraceTop <= Other.Bottom)
                     {
-                        if (contactObject == null || Other.Bottom > contactObject.Top)
+                        if (contactObject == null || Other.Bottom > contactObject.Bottom)
                         {
                             contactObject = Other;
                         }

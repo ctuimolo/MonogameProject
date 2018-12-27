@@ -168,9 +168,7 @@ namespace SampleProject.GameObjects.Player
         }
 
         public override void Update()
-        {
-            ApplyGravity();
-
+        { 
             if (Keyboard.GetState().IsKeyDown(Keys.D) && !Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 MoveRight();
@@ -184,6 +182,8 @@ namespace SampleProject.GameObjects.Player
                 transform.speed.Y = -10;
                 grounded = false;
             }
+
+            ApplyGravity();
 
             //CheckGrounded();
             //ApplyGravity();
