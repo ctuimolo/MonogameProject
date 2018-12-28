@@ -18,11 +18,9 @@ namespace SampleProject.GameObjects.Player
         public BoxCollider transform;
 
         private List<Wall> walls;
-        private Wall currentFloor;
-        private int gravity = 1;
-        private int maxSpeed = 10;
-        private int moveSpeed = 3;
-        //private int xSpeed, ySpeed;
+        private float gravity = 1;
+        private float maxSpeed = 10;
+        private float moveSpeed = 3;
         private Rectangle drawRect;
         private float scale = 1;
         public bool grounded = false;
@@ -48,12 +46,16 @@ namespace SampleProject.GameObjects.Player
 
         public override void Collide(BoxCollider collision)
         {
+        }
+
+        public override void Land(BoxCollider collision)
+        {
             if (collision.owner.collisionType == CollisionType.wall)
             {
                 grounded = true;
             }
         }
-        
+
         public void SetWalls(List<Wall> rootWalls) 
         {
             walls = rootWalls;
@@ -134,7 +136,7 @@ namespace SampleProject.GameObjects.Player
 
         private void CheckGrounded()
         {
-            if (currentFloor != null &&
+            /*if (currentFloor != null &&
                 transform.Left <= currentFloor.transform.Right && transform.Right >= currentFloor.transform.Left &&
                 transform.Bottom + 1 <= currentFloor.transform.Bottom && transform.Bottom + 1 >= currentFloor.transform.Top)
             {
@@ -142,7 +144,7 @@ namespace SampleProject.GameObjects.Player
             } else
             {
                 grounded = false;
-            }
+            }*/
         }
 
         private void MoveDown()
@@ -177,6 +179,10 @@ namespace SampleProject.GameObjects.Player
             if (Keyboard.GetState().IsKeyDown(Keys.A) && !Keyboard.GetState().IsKeyDown(Keys.D))
             {
                 MoveLeft();
+            }
+            if (!Keyboard.GetState().IsKeyDown(Keys.A) && !Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                transform.speed.X = 0;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.W) && grounded) {
                 transform.speed.Y = -10;

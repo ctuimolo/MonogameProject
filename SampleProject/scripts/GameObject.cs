@@ -10,6 +10,7 @@ namespace SampleProject.GameObjects
         public abstract void Draw(SpriteBatch rootSpriteBatch);
         public abstract void LoadContent();
         public abstract void Collide(BoxCollider otherObject);
+        public abstract void Land(BoxCollider boxCollider);
         public abstract void Update();
         public CollisionType collisionType;
     }

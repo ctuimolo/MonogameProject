@@ -49,6 +49,11 @@ namespace SampleProject.GameObjects.Walls
 
         }
 
+        public override void Land(BoxCollider otherObject)
+        {
+
+        }
+
         public override void Update()
         {
 
