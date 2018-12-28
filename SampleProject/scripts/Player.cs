@@ -50,8 +50,6 @@ namespace SampleProject.GameObjects.Player
         {
             if (collision.owner.collisionType == CollisionType.wall)
             {
-                transform.speed.Y = 0;
-                transform.position.Y = collision.Top - transform.size.Y;
                 grounded = true;
             }
         }
@@ -168,7 +166,10 @@ namespace SampleProject.GameObjects.Player
         }
 
         public override void Update()
-        { 
+        {
+            //CheckGrounded();
+            ApplyGravity();
+
             if (Keyboard.GetState().IsKeyDown(Keys.D) && !Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 MoveRight();
@@ -178,12 +179,9 @@ namespace SampleProject.GameObjects.Player
                 MoveLeft();
             }
             if (Keyboard.GetState().IsKeyDown(Keys.W) && grounded) {
-                Debug.WriteLine("Jumped");
                 transform.speed.Y = -10;
                 grounded = false;
             }
-
-            ApplyGravity();
 
             //CheckGrounded();
             //ApplyGravity();

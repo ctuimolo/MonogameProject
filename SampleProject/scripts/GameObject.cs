@@ -3,13 +3,6 @@ using SampleProject.AABBPhysics;
 
 namespace SampleProject.GameObjects
 {
-    public enum CollisionType
-    {
-        wall,
-        enemy,
-        water,
-        whatever
-    }
 
     public abstract class GameObject
     {

@@ -6,6 +6,14 @@ using SampleProject.GameObjects;
 
 namespace SampleProject.AABBPhysics
 {
+    public enum CollisionType
+    {
+        wall,
+        enemy,
+        water,
+        whatever
+    }
+
     public class BoxCollider
     {
         public Vector2 position;
@@ -54,7 +62,7 @@ namespace SampleProject.AABBPhysics
                 if (!ReferenceEquals(Other, Self))
                 {
                     if (RayTraceLeft <= Other.Right && RayTraceRight >= Other.Left &&
-                        RayTraceBottom >= Other.Top)
+                        RayTraceBottom >= Other.Top && RayTraceTop <= Other.Top)
                     {
                         if (contactObject == null || Other.Top < contactObject.Top)
                         {
@@ -66,6 +74,12 @@ namespace SampleProject.AABBPhysics
 
             if (contactObject != null)
             {
+                //Self.owner.Collide(contactObject);
+                if (contactObject.owner.collisionType == CollisionType.wall)
+                {
+                    Self.position.Y = contactObject.position.Y - Self.size.Y;
+                    Self.speed.Y = 0;
+                }
                 Self.owner.Collide(contactObject);
             } else
             {
@@ -75,9 +89,11 @@ namespace SampleProject.AABBPhysics
 
         public void MoveUp(BoxCollider Self)
         {
+            Debug.WriteLine(Self.speed.Y);
+
             float RayTraceLeft = Self.position.X;
             float RayTraceRight = Self.Right;
-            float RayTraceTop = Self.Top - Self.speed.Y;
+            float RayTraceTop = Self.Top + Self.speed.Y;
             float RayTraceBottom = Self.Top;
 
             BoxCollider contactObject = null;
@@ -88,7 +104,7 @@ namespace SampleProject.AABBPhysics
                 if (!ReferenceEquals(Other, Self))
                 {
                     if (RayTraceLeft <= Other.Right && RayTraceRight >= Other.Left &&
-                        RayTraceTop <= Other.Bottom)
+                        RayTraceTop <= Other.Bottom && RayTraceBottom >= Other.Bottom)
                     {
                         if (contactObject == null || Other.Bottom > contactObject.Bottom)
                         {
@@ -100,13 +116,12 @@ namespace SampleProject.AABBPhysics
 
             if (contactObject != null)
             {
-                Debug.WriteLine("Collision Top");
                 Self.owner.Collide(contactObject);
             }
             else
             {
-                Debug.WriteLine("No colision Top");
-                Self.position.Y -= Self.speed.Y;
+                Debug.WriteLine("MovedUp");
+                Self.position.Y += Self.speed.Y;
             }
         }
 
