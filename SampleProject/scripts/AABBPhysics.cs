@@ -207,6 +207,53 @@ namespace SampleProject.AABBPhysics
             }
         }
 
+        public void MoveDownRight(BoxCollider Self)
+        {
+            float RayTraceLeft = Self.position.X + 1;
+            float RayTraceRight = RayTraceLeft + Self.size.X + Self.speed.X - 2;
+            float RayTraceTop = Self.position.Y + Self.size.Y;
+            float RayTraceBottom = RayTraceTop + Self.speed.Y + Self.speed.Y - 1;
+
+            BoxCollider contactObject = null;
+            float downTheta = Self.speed.X / Self.speed.Y;
+            float rightTheta = Self.speed.Y / Self.speed.X;
+
+            foreach (BoxCollider Other in BoxColliders)
+            {
+
+                if (!ReferenceEquals(Other, Self))
+                {
+
+                    // Check downward
+                    if (RayTraceLeft <= Other.Right && RayTraceRight >= Other.Left &&
+                        RayTraceBottom >= Other.Top && RayTraceTop <= Other.Top)
+                    {
+                        if ( /* position.X + tan(theta)*Difference.Y <= OtherRright && [prev] + width => Other.Left */ true ) {
+                            if (contactObject == null || Other.Top < contactObject.Top)
+                            {
+                                contactObject = Other;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (contactObject != null)
+            {
+                //Self.owner.Collide(contactObject);
+                if (contactObject.owner.collisionType == CollisionType.wall)
+                {
+                    Self.position.Y = contactObject.position.Y - Self.size.Y;
+                    Self.speed.Y = 0;
+                }
+                Self.owner.Land(contactObject);
+            }
+            else
+            {
+                Self.position.Y += Self.speed.Y;
+            }
+        }
+
         public void UpdatePosition(BoxCollider Self)
         {
             if (Self.speed.X == 0)
@@ -233,7 +280,7 @@ namespace SampleProject.AABBPhysics
                 {
                     if (Self.speed.Y > 0)
                     {
-                        //MoveDownRight(Self);
+                        MoveDownRight(Self);
                     } else
                     {
                         //MoveUpRight(Self);
